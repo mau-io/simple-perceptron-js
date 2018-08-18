@@ -9,4 +9,4 @@ Por otra parte, el perceptrón es la única red neuronal que tiene un teorema de
 
 ![Figure 1-1](text.jpg "Figure 1-1")
 
-[Documentacion](https://mau-io.github.io/simple-perceptron-js/doc_ES.html)
+[Documentacion](https://mau-io.github.io/simple-perceptron-js/doc/index.html)
