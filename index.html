@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Simple Perceptron</title>
+  <script type="text/javascript" src="perceptron.js"></script>
+</head>
+<body>
+
+  <button onclick="train([
+    { input: [0,0,1,1],    output: 1},
+    { input: [1,1,1,1],    output: 0},
+    { input: [1,1,0,0],    output: 0},
+    { input: [0,0,0,0],    output: 1},
+  ])">
+  Train
+  </button>
+ 
+  <button onclick="predict([[0,0,1,1],[1,1,1,1],[0,0,0,0]])">Predict</button>
+
+  <p id="initWeights"></p>
+  <p id="epochs"></p>
+  <p id="finalWeights"></p>
+
+  <ul id="prediction"></ul>
+
+  <script>
+
+    const ann = new Perceptron(4); // param: number inputs
+    
+    document.getElementById("initWeights").innerHTML = `<p> Init Weights: ${ann.weights} </p>`;
+
+    
+    function train(data){
+      // data, learningRate = 0.125, maxEpochs = 200
+      let epochs = ann.train(data, 0.125, 200);
+      
+      document.getElementById("epochs").innerHTML = `<p> Trained in ${epochs} Epochs </p>`;
+      document.getElementById("finalWeights").innerHTML = `<p> Final Weights: ${ann.weights} </p>`;
+
+    }
+    
+    function predict(array){
+    
+      for(var i = 0; i < array.length; i++){
+        let node = document.createElement("li");
+        let textnode = document.createTextNode(`input: [${array[i]}] output: ${ann.predict(array[i])} `);
+        node.appendChild(textnode);
+        document.getElementById("prediction").appendChild(node);
+      }
+    
+    }
+
+  </script>
+
+</body>
+</html>
