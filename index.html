@@ -10,15 +10,24 @@
 <body>
 
   <button onclick="train([
-    { input: [0,0,1,1],    output: 1},
-    { input: [1,1,1,1],    output: 0},
-    { input: [1,1,0,0],    output: 0},
-    { input: [0,0,0,0],    output: 1},
+    { input: [0,1],    output: 1},
+    { input: [1,0],    output: 1},
+    { input: [1,1],    output: 1},
+    { input: [0,0],    output: 0},
   ])">
-  Train
+  Train OR
+  </button>
+
+  <button onclick="train([
+    { input: [0,1],    output: 0},
+    { input: [1,0],    output: 0},
+    { input: [1,1],    output: 0},
+    { input: [0,0],    output: 1},
+  ])">
+  Train AND
   </button>
  
-  <button onclick="predict([[0,0,1,1],[1,1,1,1],[0,0,0,0]])">Predict</button>
+  <button onclick="predict([[0,1],[1,0],[1,1],[0,0]])">Predict</button>
 
   <p id="initWeights"></p>
   <p id="epochs"></p>
@@ -28,14 +37,14 @@
 
   <script>
 
-    const ann = new Perceptron(4); // param: number inputs
+    const ann = new Perceptron(2); // param: number inputs
     
     document.getElementById("initWeights").innerHTML = `<p> Init Weights: ${ann.weights} </p>`;
 
     
     function train(data){
       // data, learningRate = 0.125, maxEpochs = 200
-      let epochs = ann.train(data, 0.125, 200);
+      let epochs = ann.train(data, 0.125, 2000);
       
       document.getElementById("epochs").innerHTML = `<p> Trained in ${epochs} Epochs </p>`;
       document.getElementById("finalWeights").innerHTML = `<p> Final Weights: ${ann.weights} </p>`;
@@ -45,13 +54,18 @@
     function predict(array){
     
       for(var i = 0; i < array.length; i++){
-        let node = document.createElement("li");
-        let textnode = document.createTextNode(`input: [${array[i]}] output: ${ann.predict(array[i])} `);
-        node.appendChild(textnode);
-        document.getElementById("prediction").appendChild(node);
+        appendChild(`input: [${array[i]}] output: ${ann.predict(array[i])} `)
       }
-    
+      appendChild("-------------------------------", "h4")
+     
     }
+
+  function appendChild(string, element = "li"){
+    let node = document.createElement(element);
+    let textnode = document.createTextNode(string);
+    node.appendChild(textnode);
+    document.getElementById("prediction").appendChild(node);
+  }
 
   </script>
 
