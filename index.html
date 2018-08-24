@@ -6,48 +6,137 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Simple Perceptron</title>
   <script type="text/javascript" src="perceptron.js"></script>
+  <style>
+    html{
+      background-color: #f2f3f8;
+    }
+    body{
+      font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+      color: #5a5e67;
+      text-rendering: optimizeLegibility;
+    }
+    .container {
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 1024px;
+      margin: 0 auto;
+      padding: 20px; 
+      box-shadow: 0px 1px 15px 1px rgba(69,65,78,0.08);
+      background-color: #fff;
+    }
+    .btn {
+      display: inline-block;
+      font-weight: 400;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: .85rem 1.15rem;
+      font-size: 1rem;
+      line-height: 1.25;
+      border-radius: .25rem;
+      cursor: pointer;
+      -webkit-transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+      transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+      transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+      transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      box-shadow: 0px 3px 20px 0px rgba(113,106,202,0.26) ;
+      color: #fff ;
+      background-color: #564ec0;
+      border-color: #4d44bd;
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      background-color: #4d44bd;
+      border-color: #4940b4;
+    }
+    
+    .btn-secondary {
+      box-shadow: 0px 3px 20px 0px rgba(113,106,202,0.17);
+      border-color: #ffffff;
+      background: #ffffff;
+    }
+
+    .btn-secondary:hover {
+      background: #716aca ;
+      color: #fff ;
+      border-color: #716aca ;
+    }
+
+  </style>
 </head>
 <body>
 
-  <button onclick="train([
-    { input: [0,1],    output: 1},
-    { input: [1,0],    output: 1},
-    { input: [1,1],    output: 1},
-    { input: [0,0],    output: 0},
-  ])">
-  Train OR
-  </button>
+  <div class="container">
+    <button onclick="train([
+      { input: [0,1],    output: 1},
+      { input: [1,0],    output: 1},
+      { input: [1,1],    output: 1},
+      { input: [0,0],    output: 0},
+    ])" class="btn btn-secondary">
+    Training OR
+    </button>
+  
+    <button onclick="train([
+      { input: [0,1],    output: 0},
+      { input: [1,0],    output: 0},
+      { input: [1,1],    output: 0},
+      { input: [0,0],    output: 1},
+    ])" class="btn btn-secondary">
+    Training AND
+    </button>
+  
+    <button onclick="train([
+      { input: [0,1],    output: 1},
+      { input: [1,0],    output: 1},
+      { input: [1,1],    output: 0},
+      { input: [0,0],    output: 0},
+    ])" class="btn btn-secondary">
+    Training XOR
+    </button>
 
-  <button onclick="train([
-    { input: [0,1],    output: 0},
-    { input: [1,0],    output: 0},
-    { input: [1,1],    output: 0},
-    { input: [0,0],    output: 1},
-  ])">
-  Train AND
-  </button>
+    <button onclick="predict([
+      [0,1],
+      [1,0],
+      [1,1],
+      [0,0]
+    ])" class="btn btn-primary">
+    Predict
+    </button>
+  
+    <p id="initWeights"></p>
+    <p id="epochs"></p>
+    <p id="finalWeights"></p>
+  
+    <ul id="prediction"></ul>
+  </div>
  
-  <button onclick="predict([[0,1],[1,0],[1,1],[0,0]])">Predict</button>
-
-  <p id="initWeights"></p>
-  <p id="epochs"></p>
-  <p id="finalWeights"></p>
-
-  <ul id="prediction"></ul>
 
   <script>
 
     const ann = new Perceptron(2); // param: number inputs
     
-    document.getElementById("initWeights").innerHTML = `<p> Init Weights: ${ann.weights} </p>`;
-
+    print("initWeights", `Init Weights: ${ann.weights}`);
     
     function train(data){
       // data, learningRate = 0.125, maxEpochs = 200
-      let epochs = ann.train(data, 0.125, 2000);
-      
-      document.getElementById("epochs").innerHTML = `<p> Trained in ${epochs} Epochs </p>`;
-      document.getElementById("finalWeights").innerHTML = `<p> Final Weights: ${ann.weights} </p>`;
+      let message = ann.train(data, 0.125, 2000);
+      print("epochs", message);
+      print("finalWeights", `Final Weights: ${ann.weights}`);
 
     }
     
@@ -56,16 +145,20 @@
       for(var i = 0; i < array.length; i++){
         appendChild(`input: [${array[i]}] output: ${ann.predict(array[i])} `)
       }
-      appendChild("-------------------------------", "h4")
+      appendChild("", "br")
      
     }
 
-  function appendChild(string, element = "li"){
-    let node = document.createElement(element);
-    let textnode = document.createTextNode(string);
-    node.appendChild(textnode);
-    document.getElementById("prediction").appendChild(node);
-  }
+    function appendChild(string, element = "li"){
+      let node = document.createElement(element);
+      let textnode = document.createTextNode(string);
+      node.appendChild(textnode);
+      document.getElementById("prediction").appendChild(node);
+    }
+
+    function print(id, text){
+      document.getElementById(id).innerHTML = text;
+    }
 
   </script>
 
