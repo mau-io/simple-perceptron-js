@@ -39,7 +39,7 @@ class Perceptron {
     return Math.tanh(net) > 0 ? 1 : 0;
   }
 
- train(data, learningRate = 0.125, maxEpochs = 200){
+  train(data, learningRate = 0.125, maxEpochs = 200){
 
     this.learningRate = learningRate;
 
@@ -56,7 +56,7 @@ class Perceptron {
       success = this.learning(data);
     }
 
-   return count;
+   return success ? `Trained in ${count}` : `${count} Max limit, Not trained`;
 
   }
 
